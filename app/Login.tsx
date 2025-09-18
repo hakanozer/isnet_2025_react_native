@@ -1,18 +1,45 @@
 import CustomButton from "@/components/CustomButton";
+import { userLogin } from "@/services/userService";
+import { storeUser } from "@/utils/storeUser";
+import { validateEmail } from "@/utils/util";
 import { StackActions, useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from 'react-native-toast-message';
 
 const Login = () => {
 
   const navigation = useNavigation();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('hakanozer02@gmail.com');
+  const [password, setPassword] = useState('123456');
 
   const sendLogin = () => {
-    console.log(email, password)
+    if (!validateEmail(email)) {
+      Toast.show({
+        type: 'error',
+        text1: 'E-Mail field is required.',
+      });
+    }else if (password.length < 5) {
+      Toast.show({
+        type: 'error',
+        text1: 'Password must be at least 6 characters long.',
+      });
+    } else {
+      userLogin(email, password).then(res => {
+        // işlem 200 olduğunda
+        const dt = res.data
+        storeUser(dt).then(() => {
+          // redirect - products
+        })
+      }).catch(err => {
+        Toast.show({
+          type: 'error',
+          text1: 'Incorrect email or password.'
+        })
+      })
+    }
   }
   const emailChange = (text: string) => {
     //console.log(text);
@@ -36,8 +63,8 @@ const Login = () => {
         <View style={styles.container}>
           <Image source={require('../assets/images/icn_apple.png')} style={{ width: 100, height: 100, marginBottom: 20 }} />
           <Text style={styles.title}>User Login</Text>
-          <TextInput onChangeText={(text) => { setEmail(text) }} placeholder="E-Mail" autoCapitalize="none" keyboardType="email-address" style={styles.input} />
-          <TextInput onChangeText={(text) => { setPassword(text) }} placeholder="Password" autoCapitalize="none" secureTextEntry style={styles.input} />
+          <TextInput defaultValue={email} autoComplete="email" onChangeText={(text) => { setEmail(text) }} placeholder="E-Mail" autoCapitalize="none" keyboardType="email-address" style={styles.input} />
+          <TextInput defaultValue={password} autoComplete="password" onChangeText={(text) => { setPassword(text) }} placeholder="Password" autoCapitalize="none" secureTextEntry style={styles.input} />
           <View style={styles.buttonGroup}>
             <CustomButton title="Login" onPressFnc={sendLogin} />
             <CustomButton title="Register" onPressFnc={gotoRegister} />
