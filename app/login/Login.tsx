@@ -32,6 +32,7 @@ const Login = () => {
         const dt = res.data
         storeUser(dt).then(() => {
           // redirect - products
+          navigation.dispatch(StackActions.replace('MainTab'))
         })
       }).catch(err => {
         Toast.show({
@@ -61,7 +62,7 @@ const Login = () => {
     <SafeAreaView style={styles.safeArea}>
         <ScrollView contentContainerStyle={styles.scrollView} keyboardShouldPersistTaps="handled" automaticallyAdjustKeyboardInsets>
         <View style={styles.container}>
-          <Image source={require('../assets/images/icn_apple.png')} style={{ width: 100, height: 100, marginBottom: 20 }} />
+          <Image source={require('../../assets/images/icn_apple.png')} style={{ width: 100, height: 100, marginBottom: 20 }} />
           <Text style={styles.title}>User Login</Text>
           <TextInput defaultValue={email} autoComplete="email" onChangeText={(text) => { setEmail(text) }} placeholder="E-Mail" autoCapitalize="none" keyboardType="email-address" style={styles.input} />
           <TextInput defaultValue={password} autoComplete="password" onChangeText={(text) => { setPassword(text) }} placeholder="Password" autoCapitalize="none" secureTextEntry style={styles.input} />
