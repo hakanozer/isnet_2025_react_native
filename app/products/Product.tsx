@@ -1,8 +1,9 @@
+import ProductItem from '@/components/ProductItem'
 import { IProduct } from '@/models/IAllProducts'
 import { allProducts } from '@/services/productService'
 import { useNavigation } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { FlatList, StyleSheet, View } from 'react-native'
 
 const Product = () => {
 
@@ -20,13 +21,14 @@ const Product = () => {
   }, [])
 
   return (
-      <ScrollView contentContainerStyle={styles.scrollView} keyboardShouldPersistTaps="handled" automaticallyAdjustKeyboardInsets>
         <View style={styles.container}>
-          {proArr.map((item, index) => 
-            <Text key={index}>{item.title}</Text>
-          )}
+          <FlatList 
+            data={proArr}
+            renderItem={ ({item, index}) =>
+              <ProductItem item={item} key={index} />
+            }
+          />
         </View>
-      </ScrollView>
   )
 }
 
@@ -34,11 +36,12 @@ export default Product
 
 const styles = StyleSheet.create({
   scrollView: {
-    backgroundColor: '#ffffff',
+    
     flexGrow: 1,
   },
   container: {
     flex: 1,
     paddingHorizontal: 10,
+    backgroundColor: '#ffffff',
   },
 })
