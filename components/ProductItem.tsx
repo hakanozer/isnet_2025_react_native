@@ -1,11 +1,16 @@
 import { IProduct } from '@/models/IAllProducts'
+import { StackActions, useNavigation } from '@react-navigation/native'
 import React from 'react'
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 const w = Dimensions.get("window").width
+
 const ProductItem = (props: {item: IProduct}) => {
+
+  const navigation = useNavigation()
+
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={() => navigation.dispatch(StackActions.push('ProductDetail', {item: props.item}))}>
         <View style={styles.container}>
             <Image source={{ uri: props.item.images[0] }} style={styles.image}   />
             <View style={styles.info}>
@@ -13,7 +18,6 @@ const ProductItem = (props: {item: IProduct}) => {
                 <Text style={styles.price}>{props.item.price}₺</Text>
             </View>
         </View>
-        
     </TouchableOpacity>
   )
 }

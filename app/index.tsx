@@ -12,12 +12,14 @@ import Register from "./login/Register";
 
 // import Product Pages
 import Product from "./products/Product";
+import ProductDetail from './products/ProductDetail';
 
 // import Likes Pages
 import Likes from "./likes/Likes";
 
 // import Settings Pages
 import Settings from "./settings/Settings";
+
 
 
 const MainStack = createNativeStackNavigator();
@@ -35,6 +37,7 @@ const UserLoginStack = () => (
 const ProductStack = () => (
 <MainStack.Navigator>
   <MainStack.Screen name="Product" component={Product} options={{ headerShown: true }} />
+  <MainStack.Screen name="ProductDetail" component={ProductDetail} options={{ headerShown: true }} />
 </MainStack.Navigator>
 )
 
