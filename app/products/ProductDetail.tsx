@@ -1,11 +1,20 @@
 import { IProduct } from '@/models/IAllProducts'
 import { singleProduct } from '@/services/productService'
+import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { useRoute } from '@react-navigation/native'
+import { useNavigation } from 'expo-router'
 import React, { useEffect, useState } from 'react'
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 const ProductDetail = () => {
 
+  const navigation = useNavigation()
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: 'Product Detail',
+    })
+  }, [])  
+  const [bigImage, setBigImage] = useState('')
   const [proItem, setProItem] = useState<IProduct>()  
   const route = useRoute()
   const obj = route.params! as {item: IProduct}
@@ -13,6 +22,7 @@ const ProductDetail = () => {
   useEffect(() => {
     singleProduct(obj.item.id).then(res => {
         const item = res.data.data
+        setBigImage(item.images[0])
         setProItem(item)
     })
   }, [])
@@ -22,7 +32,24 @@ const ProductDetail = () => {
         { proItem && 
             <View style={styles.container}>
                 <Text style={styles.title}>{proItem.title}</Text>
-                <Image  />
+                <Image style={styles.bigImage} source={{uri: bigImage}} />
+                <ScrollView contentContainerStyle={{ alignItems: "center" }}  horizontal={true} showsHorizontalScrollIndicator={false}>
+                    <View style={styles.imgGroup}>
+                        {proItem.images.map((img, index) => 
+                            <TouchableOpacity key={index} onPress={() => setBigImage(img)}>
+                                <Image style={styles.thumbImage} source={{uri: img}} />
+                            </TouchableOpacity>
+                        )}
+                    </View>
+                </ScrollView>
+                <Text style={{fontSize: 20, color: '#ff0000', marginTop: 10}}>Price: {proItem.price}₺</Text>
+                <Text style={{fontSize: 16, marginTop: 10}}>{proItem.description}</Text>
+                <View style={{marginTop: 20, alignItems: 'center'}}>
+                    <TouchableOpacity onPress={() => alert('Added to Favorites!')} style={{marginBottom: 5}}>
+                        <FontAwesome name="heart-o" size={35} color={'#ff0000'} />
+                    </TouchableOpacity>
+                </View>
+                
             </View>
         }
       </ScrollView>
@@ -37,7 +64,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff'
   },
   container: {
-    flex: 1,
     paddingHorizontal: 10,
     paddingTop: 10,
   },
@@ -45,5 +71,22 @@ const styles = StyleSheet.create({
     fontSize: 22,
     textAlign: 'center',
     marginBottom: 10,
+  },
+  bigImage: {
+    width: '100%',
+    height: 300
+  },
+  imgGroup: {
+    marginTop: 10,
+    flexDirection: 'row',
+  },
+   thumbImage: {
+    width: 88,
+    height: 88,
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: '#626262ff',
+    marginRight: 5,
+    resizeMode: "cover",
   }
 })
