@@ -34,7 +34,7 @@ const UserLoginStack = () => (
 // Product Stack Navigator
 const ProductStack = () => (
 <MainStack.Navigator>
-  <MainStack.Screen name="Product" component={Product} options={{ headerShown: false }} />
+  <MainStack.Screen name="Product" component={Product} options={{ headerShown: true }} />
 </MainStack.Navigator>
 )
 
