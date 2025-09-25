@@ -1,5 +1,6 @@
 import CustomButton from "@/components/CustomButton";
 import { userLogin } from "@/services/userService";
+import { eUser, IUserAction } from "@/useRedux/userReducer";
 import { storeUser } from "@/utils/storeUser";
 import { validateEmail } from "@/utils/util";
 import { StackActions, useNavigation } from "@react-navigation/native";
@@ -7,9 +8,11 @@ import { useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from 'react-native-toast-message';
+import { useDispatch } from "react-redux";
 
 const Login = () => {
 
+  const dispatch = useDispatch()
   const navigation = useNavigation();
 
   const [email, setEmail] = useState('hakanozer02@gmail.com');
@@ -32,6 +35,11 @@ const Login = () => {
         const dt = res.data
         storeUser(dt).then(() => {
           // redirect - products
+          const sendObj:IUserAction = {
+            type: eUser.USER_INFO,
+            payload: dt
+          }
+          dispatch(sendObj)
           navigation.dispatch(StackActions.replace('MainTab'))
         })
       }).catch(err => {

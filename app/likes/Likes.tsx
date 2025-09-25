@@ -1,25 +1,26 @@
 import ProductItem from '@/components/ProductItem'
 import { IProduct } from '@/models/IAllProducts'
 import { singleProduct } from '@/services/productService'
-import { allLikes } from '@/utils/storeLikes'
 import { useNavigation } from '@react-navigation/native'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
+import { useSelector } from 'react-redux'
+import { StateType } from '../../useRedux/store'
 
 const Likes = () => {
+
+  const likesArr = useSelector((item: StateType) => item.likesReducer)
 
   const navigation = useNavigation()
   const [proArr, setProArr] = useState<IProduct[]>([])
   useEffect(() => {
     navigation.setOptions({ title: 'Likes' })
-    allLikes().then(arr => {
-      axios.all(arr.map(id => singleProduct(id))).then(arrRes => {
+      axios.all(likesArr.map(id => singleProduct(id))).then(arrRes => {
         const newArr: IProduct[] = arrRes.map(item => item.data.data)
         setProArr(newArr)
       })
-    })
-  }, [])
+  }, [likesArr])
 
     
   return (

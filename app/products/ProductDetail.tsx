@@ -1,11 +1,13 @@
 import { IProduct } from '@/models/IAllProducts'
 import { singleProduct } from '@/services/productService'
-import { isLiked, likesAddRemove } from '@/utils/storeLikes'
+import { eLikes, ILikesAction } from '@/useRedux/likesReducer'
+import { allLikes, isLiked, likesAddRemove } from '@/utils/storeLikes'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { useRoute } from '@react-navigation/native'
 import { useNavigation } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { useDispatch } from 'react-redux'
 
 const ProductDetail = () => {
 
@@ -15,6 +17,8 @@ const ProductDetail = () => {
       headerTitle: 'Product Detail',
     })
   }, [])
+
+  const dispatch = useDispatch()
 
   const [isLike, setIsLike] = useState(false)
   const [bigImage, setBigImage] = useState('')
@@ -37,6 +41,13 @@ const ProductDetail = () => {
     likesAddRemove(id).then(() => {
       isLiked(id).then(status => {
           setIsLike(status)
+          allLikes().then(arr => {
+            const sendObj: ILikesAction= {
+              type: eLikes.LIKES_LIST,
+              payload: arr
+            }
+            dispatch(sendObj)
+          })
       })
     })
   }

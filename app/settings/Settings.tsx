@@ -1,20 +1,21 @@
 import React, { useEffect } from 'react'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
 
 const Settings = () => {
+
 
   useEffect(() => {
   }, [])
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
+      <StatusBar animated={true} />
       <ScrollView contentContainerStyle={styles.scrollView} keyboardShouldPersistTaps="handled" automaticallyAdjustKeyboardInsets>
         <View style={styles.container}>
-          <Text>Settings</Text>
+          <Text>Data</Text>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   )
 }
 

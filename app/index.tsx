@@ -4,6 +4,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StyleSheet } from "react-native";
 import Toast from 'react-native-toast-message';
+import { Provider } from 'react-redux';
+import { store } from '../useRedux/store';
 
 // import User Pages
 import React from "react";
@@ -18,6 +20,7 @@ import ProductDetail from './products/ProductDetail';
 import Likes from "./likes/Likes";
 
 // import Settings Pages
+import SettingsHeader from '@/components/SettingsHeader';
 import Settings from "./settings/Settings";
 
 
@@ -41,7 +44,7 @@ const ProductStack = () => (
 </MainStack.Navigator>
 )
 
-// Product Stack Navigator
+// Likes Stack Navigator
 const LikesStack = () => (
 <MainStack.Navigator>
   <MainStack.Screen name="Likes" component={Likes} options={{ headerShown: true }} />
@@ -49,10 +52,10 @@ const LikesStack = () => (
 </MainStack.Navigator>
 )
 
-// Product Stack Navigator
+// Settings Stack Navigator
 const SettingsStack = () => (
 <MainStack.Navigator>
-  <MainStack.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
+  <MainStack.Screen name="Settings" component={Settings} options={{ header: () => <SettingsHeader/>, headerShown: true }} />
 </MainStack.Navigator>
 )
 
@@ -105,11 +108,13 @@ export default function Index() {
 
   return (
     <React.Fragment>
-      <MainStack.Navigator screenOptions={{ headerShown: false }}>
-        <MainStack.Screen name="UserLoginStack" component={UserLoginStack}  />
-        <MainStack.Screen name="MainTab" component={MainTab}  />
-      </MainStack.Navigator>
-      <Toast />
+      <Provider store={store}>
+        <MainStack.Navigator screenOptions={{ headerShown: false }}>
+          <MainStack.Screen name="UserLoginStack" component={UserLoginStack}  />
+          <MainStack.Screen name="MainTab" component={MainTab}  />
+        </MainStack.Navigator>
+        <Toast />
+      </Provider>
     </React.Fragment>
   )
 
