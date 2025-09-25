@@ -44,7 +44,8 @@ const ProductStack = () => (
 // Product Stack Navigator
 const LikesStack = () => (
 <MainStack.Navigator>
-  <MainStack.Screen name="Likes" component={Likes} options={{ headerShown: false }} />
+  <MainStack.Screen name="Likes" component={Likes} options={{ headerShown: true }} />
+  <MainStack.Screen name="ProductDetail" component={ProductDetail} options={{ headerShown: true }} />
 </MainStack.Navigator>
 )
 
