@@ -2,13 +2,16 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React from "react";
 import { StyleSheet } from "react-native";
 import Toast from 'react-native-toast-message';
 import { Provider } from 'react-redux';
 import { store } from '../useRedux/store';
 
+// Splash Screen
+import Splash from './splash/Splash';
+
 // import User Pages
-import React from "react";
 import Login from "./login/Login";
 import Register from "./login/Register";
 
@@ -110,6 +113,7 @@ export default function Index() {
     <React.Fragment>
       <Provider store={store}>
         <MainStack.Navigator screenOptions={{ headerShown: false }}>
+          <MainStack.Screen name="Splash" component={Splash} options={{headerShown: false, headerShadowVisible: false,}}   />
           <MainStack.Screen name="UserLoginStack" component={UserLoginStack}  />
           <MainStack.Screen name="MainTab" component={MainTab}  />
         </MainStack.Navigator>

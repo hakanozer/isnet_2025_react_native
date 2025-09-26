@@ -17,7 +17,7 @@ const SettingsHeader = () => {
     <View style={styles.container}>
       <View style={styles.mainView}>
         <Text style={styles.likesTxt}>Likes: {likesArr.length}</Text>
-        <Text style={styles.nameTxt}>{user.data.user.name}</Text>
+        <Text style={styles.nameTxt}>{user.data.user?.name}</Text>
       </View>
     </View>
   )

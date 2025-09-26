@@ -13,3 +13,10 @@ export const userLogout = () => {
   // logout işlemi
   return apiClient.post("auth/logout");
 }
+
+export const profileMe = (jwtToken: string) => {
+  const headers = {
+    Authorization: `Bearer ${jwtToken}`
+  }
+  return apiClient.get<IUser>("profile/me", {headers});
+}

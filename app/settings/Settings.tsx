@@ -2,8 +2,10 @@ import { userLogout } from '@/services/userService';
 import { deleteUser } from '@/utils/storeUser';
 import { StackActions, useNavigation } from "@react-navigation/native";
 import React, { useEffect } from 'react';
-import { ActionSheetIOS, Alert, Platform, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActionSheetIOS, Alert, Linking, Platform, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
+import { Hoshi } from 'react-native-textinput-effects';
+
 
 const Settings = () => {
 
@@ -61,9 +63,9 @@ const Settings = () => {
   }, [])
 
   const companies = [
-    { id: 1, title: 'Company A', description: 'Description A', latitude: 41.015137, longitude: 28.979530 },
-    { id: 2, title: 'Company B', description: 'Description B', latitude: 41.012345, longitude: 28.975678 },
-    { id: 3, title: 'Company C', description: 'Description C', latitude: 41.012365, longitude: 28.981345 },
+    { id: 1, title: 'Topkapı Sarayı Müzesi', description: 'Description A', latitude: 41.015137, longitude: 28.979530, phone: '+902125120400' },
+    { id: 2, title: 'Sultan Ahmet Cami', description: 'Description B', latitude: 41.012345, longitude: 28.975678, phone: '+902125181840' },
+    { id: 3, title: 'Galataport İstanbul', description: 'Description C', latitude: 41.012365, longitude: 28.981345, phone: '+902125120400' },
   ];
 
   return (
@@ -71,28 +73,65 @@ const Settings = () => {
       <StatusBar animated={true} />
       <ScrollView contentContainerStyle={styles.scrollView} keyboardShouldPersistTaps="handled" automaticallyAdjustKeyboardInsets>
         <View style={styles.container}>
-          <MapView
+          <Text style={{ fontSize: 16, fontWeight: 'bold', marginTop: 10 }}>Şirketler Haritası</Text>
+            <MapView
             style={styles.map}
             zoomEnabled={true}
             zoomControlEnabled={true}
             showsScale={true}
             showsTraffic={true}
-            initialRegion={{
-              latitude: 41.0148755,
-              longitude: 28.9652514,
-              latitudeDelta: 0.1,
-              longitudeDelta: 0.1,
+            region={{
+              latitude: companies.reduce((sum, c) => sum + c.latitude, 0) / companies.length,
+              longitude: companies.reduce((sum, c) => sum + c.longitude, 0) / companies.length,
+              latitudeDelta: 0.01,
+              longitudeDelta: 0.01,
             }}
-          >
+            //onRegionChange={(region) => { console.log(region) }}
+            onRegionChangeComplete={(region) => { console.log(region) }}
+            >
             {companies.map(company => (
               <Marker
-                key={company.id}
-                coordinate={{ latitude: company.latitude, longitude: company.longitude }}
-                title={company.title}
-                description={company.description}
+              key={company.id}
+              coordinate={{ latitude: company.latitude, longitude: company.longitude }}
+              title={company.title}
+              description={company.description}
+              onPress={() => 
+                Linking.openURL('maps://app?daddr=' + company.latitude + ',' + company.longitude + '&directionsmode=driving')
+              }
               />
             ))}
-          </MapView>
+            </MapView>
+
+            <Hoshi
+              label={'Name'}
+              borderHeight={1}
+              borderColor={'#514f50ff'}
+              inputPadding={16}
+              style={{ marginTop: 20 }}
+              labelStyle={{ color: '#514f50ff' }}
+              inputStyle={{ color: '#000000ff' }}
+              // onChangeText={(text) => this.setState({ name: text })}
+            />
+            <Hoshi
+              label={'Surname'}
+              borderHeight={1}
+              borderColor={'#514f50ff'}
+              inputPadding={16}
+              style={{ marginTop: 20 }}
+              labelStyle={{ color: '#514f50ff' }}
+              inputStyle={{ color: '#000000ff' }}
+              // onChangeText={(text) => this.setState({ name: text })}
+            />
+            <Hoshi
+              label={'E-Mail'}
+              borderHeight={1}
+              borderColor={'#514f50ff'}
+              inputPadding={16}
+              style={{ marginTop: 20 }}
+              labelStyle={{ color: '#514f50ff' }}
+              inputStyle={{ color: '#000000ff' }}
+              // onChangeText={(text) => this.setState({ name: text })}
+            />
         </View>
       </ScrollView>
       <TouchableOpacity onPress={handleLogout} style={styles.logoutMain}>
@@ -115,6 +154,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 10,
+    paddingBottom: 20,
   },
   logoutMain: {
     padding: 10,
