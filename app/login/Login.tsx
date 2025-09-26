@@ -1,4 +1,5 @@
 import CustomButton from "@/components/CustomButton";
+import apiClient from "@/services/apiConfig";
 import { userLogin } from "@/services/userService";
 import { eUser, IUserAction } from "@/useRedux/userReducer";
 import { storeUser } from "@/utils/storeUser";
@@ -40,6 +41,11 @@ const Login = () => {
             payload: dt
           }
           dispatch(sendObj)
+          // axios header ayarla jwt interceptor
+          apiClient.interceptors.request.use(config => {
+            config.headers['Authorization'] = `Bearer ${dt.data.access_token}`;
+            return config;
+          });
           navigation.dispatch(StackActions.replace('MainTab'))
         })
       }).catch(err => {

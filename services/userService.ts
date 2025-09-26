@@ -8,3 +8,8 @@ export const userLogin = (email: string, password: string) => {
   }
   return apiClient.post<IUser>("auth/login", sendObj);
 }
+
+export const userLogout = () => {
+  // logout işlemi
+  return apiClient.post("auth/logout");
+}
